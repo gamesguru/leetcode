@@ -1,8 +1,25 @@
-select machine_id, round(sum(timestamp) / count(*), 3) as processing_time from Activity group by machine_id;
+SELECT
+  machine_id,
+  sum(timestamp) AS sum_starts
+  -- round(sum(timestamp) / count(*), 3) AS processing_time
+FROM
+  Activity
+WHERE
+  activity_type = 'start'
+GROUP BY
+  machine_id;
 
--- Difficulty: easy
+SELECT
+  machine_id,
+  sum(timestamp) AS sum_ends
+FROM
+  Activity
+WHERE
+  activity_type = 'end'
+GROUP BY
+  machine_id;
 
-
+  -- (SELECT machine_id, sum(timestamp) as sum_starts FROM Activity WHERE activity_type='start' AND machine_id=Activity.machine_id) x;
 
 -- Difficulty: easy
 
