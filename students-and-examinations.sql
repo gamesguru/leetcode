@@ -19,17 +19,18 @@ SELECT
   Students.student_id,
   Students.student_name,
   Subjects.subject_name,
-  (select COUNT(Examinations.student_id) as c from Examinations where Students.student_id = Examinations.student_id) AS attended_exams
-  -- x.c
-  -- (0 + COUNT(Examinations.student_id)) AS attended_exams
-  -- COUNT(Examinations.student_id) AS attended_exams
+  (
+    SELECT
+      COUNT(Examinations.student_id) AS c
+    FROM
+      Examinations
+    WHERE
+      Students.student_id = Examinations.student_id
+      AND Subjects.subject_name = Examinations.subject_name) AS attended_exams
 FROM
   Subjects
   LEFT JOIN Examinations ON Examinations.subject_name = Subjects.subject_name
   LEFT JOIN Students ON Subjects.subject_name = Examinations.subject_name
-    -- AND Examinations.student_id = Students.student_id
-    -- OR Examinations.student_id IS NULL
-  -- (select COUNT(Examinations.student_id) as c from Examinations group by student_id) x
 GROUP BY
   student_id,
   student_name,
