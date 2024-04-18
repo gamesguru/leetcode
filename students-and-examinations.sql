@@ -1,19 +1,4 @@
--- SELECT
---   Students.student_id,
---   Students.student_name,
---   Examinations.subject_name,
---   COUNT(Examinations.student_id) AS attended_exams
--- FROM
---   Students
---   -- LEFT JOIN Subjects ON Subjects.subject_name = Examinations.subject_name
---   JOIN Examinations ON Examinations.student_id = Students.student_id
--- GROUP BY
---   student_id,
---   student_name,
---   subject_name
--- ORDER BY
---   student_id,
---   subject_name;
+-- Difficulty: easy
 
 SELECT
   Students.student_id,
@@ -31,7 +16,6 @@ FROM
   Subjects
   JOIN Students ON Subjects.subject_name = Subjects.subject_name
   LEFT OUTER JOIN Examinations ON Examinations.subject_name = Subjects.subject_name
-  OR Examinations.subject_name IS NULL
 GROUP BY
   student_id,
   student_name,
@@ -39,6 +23,9 @@ GROUP BY
 ORDER BY
   student_id,
   subject_name;
+
+-- Runtime 1832 ms
+-- Beats 52.24% of users with MySQL
 
 -- Test case 13/14
 -- | student_id | student_name |
