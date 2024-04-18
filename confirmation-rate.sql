@@ -1,17 +1,22 @@
 -- Difficulty: medium
 
 SELECT
-  s1.user_id,
-  x.c AS confirmation_rate
+  (select count(action) from x where action = 'confirmed'),
+  s1.user_id
+  -- x.action
 FROM
   Signups s1,
-  Signups s2,
-  (SELECT count(action) as c FROM Confirmations WHERE action = 'confirmed'
-    AND Confirmations.user_id = s1.user_id) x,
+  -- (SELECT count(action) as c FROM Confirmations WHERE action = 'confirmed'
+  --   AND Confirmations.user_id = s1.user_id) x,
+  (select action from Confirmations group by action, user_id) x,
   Confirmations
+-- WHERE
+--   s1.user_id = Confirmations.user_id
 GROUP BY
   s1.user_id,
-  x.c
+  x.action
+ORDER BY
+  s1.user_id
 ;
 
 -- Test case 13/14
