@@ -30,7 +30,7 @@ SELECT
 FROM
   Subjects
   LEFT JOIN Examinations ON Examinations.subject_name = Subjects.subject_name
-  LEFT JOIN Students ON Subjects.subject_name = Examinations.subject_name
+  JOIN Students ON Subjects.subject_name = Examinations.subject_name
 GROUP BY
   student_id,
   student_name,
@@ -38,6 +38,26 @@ GROUP BY
 ORDER BY
   student_id,
   subject_name;
+
+-- Test case 2
+-- | student_id | student_name |
+-- | ---------- | ------------ |
+
+-- | subject_name |
+-- | ------------ |
+-- | Math         |
+
+-- | student_id | subject_name |
+-- | ---------- | ------------ |
+
+-- output
+-- | student_id | student_name | subject_name | attended_exams |
+-- | ---------- | ------------ | ------------ | -------------- |
+-- | null       | null         | Math         | 0              |
+
+-- expected
+-- | student_id | student_name | subject_name | attended_exams |
+-- | ---------- | ------------ | ------------ | -------------- |
 
 -- Test case 1
 -- Create table If Not Exists Students (student_id int, student_name varchar(20));
