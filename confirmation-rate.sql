@@ -1,24 +1,18 @@
 -- Difficulty: medium
 
 SELECT
-  Signups.user_id,
-  ROUND(IFNULL ((
-      SELECT
-        count(action)
-      FROM Confirmations
-      WHERE
-        action = 'confirmed'
-        AND Confirmations.user_id = Signups.user_id) / (
-        SELECT
-          count(action)
-        FROM Confirmations
-        WHERE
-          Confirmations.user_id = Signups.user_id), 0), 2) AS confirmation_rate
+  s1.user_id,
+  x.c AS confirmation_rate
 FROM
-  Signups,
+  Signups s1,
+  Signups s2,
+  (SELECT count(action) as c FROM Confirmations WHERE action = 'confirmed'
+    AND Confirmations.user_id = s1.user_id) x,
   Confirmations
 GROUP BY
-  Signups.user_id;
+  s1.user_id,
+  x.c
+;
 
 -- Test case 13/14
 -- Time Limit Exceeded
