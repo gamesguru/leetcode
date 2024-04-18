@@ -29,8 +29,9 @@ SELECT
       AND Subjects.subject_name = Examinations.subject_name) AS attended_exams
 FROM
   Subjects
-  LEFT JOIN Examinations ON Examinations.subject_name = Subjects.subject_name
-  JOIN Students ON Subjects.subject_name = Examinations.subject_name
+  JOIN Students ON Subjects.subject_name = Subjects.subject_name
+  LEFT OUTER JOIN Examinations ON Examinations.subject_name = Subjects.subject_name
+  OR Examinations.subject_name IS NULL
 GROUP BY
   student_id,
   student_name,
@@ -38,6 +39,66 @@ GROUP BY
 ORDER BY
   student_id,
   subject_name;
+
+-- Test case 13/14
+-- | student_id | student_name |
+-- | ---------- | ------------ |
+-- | 54         | Jonathan     |
+-- | 72         | Khaled       |
+-- | 58         | Annabelle    |
+-- | 97         | Stefan       |
+-- | 28         | Tatiana      |
+-- | 23         | Winston      |
+-- | 26         | Alex         |
+-- | 17         | Luis         |
+
+-- | subject_name   |
+-- | -------------- |
+-- | DeepLearning   |
+-- | DataStructures |
+-- | Math           |
+
+-- | student_id | subject_name   |
+-- | ---------- | -------------- |
+-- | 97         | DataStructures |
+-- | 58         | DeepLearning   |
+-- | 17         | DeepLearning   |
+
+-- output
+-- | student_id | student_name | subject_name   | attended_exams |
+-- | ---------- | ------------ | -------------- | -------------- |
+-- | 17         | Luis         | DataStructures | 0              |
+-- | 17         | Luis         | DeepLearning   | 1              |
+-- | 23         | Winston      | DataStructures | 0              |
+-- | 23         | Winston      | DeepLearning   | 0              |
+-- | 26         | Alex         | DataStructures | 0              |
+-- | 26         | Alex         | DeepLearning   | 0              |
+-- | 28         | Tatiana      | DataStructures | 0              |
+-- | 28         | Tatiana      | DeepLearning   | 0              |
+-- | 54         | Jonathan     | DataStructures | 0              |
+-- | 54         | Jonathan     | DeepLearning   | 0              |
+-- | 58         | Annabelle    | DataStructures | 0              |
+-- | 58         | Annabelle    | DeepLearning   | 1              |
+-- | 72         | Khaled       | DataStructures | 0              |
+-- | 72         | Khaled       | DeepLearning   | 0       ...
+
+-- expected
+-- | student_id | student_name | subject_name   | attended_exams |
+-- | ---------- | ------------ | -------------- | -------------- |
+-- | 17         | Luis         | DataStructures | 0              |
+-- | 17         | Luis         | DeepLearning   | 1              |
+-- | 17         | Luis         | Math           | 0              |
+-- | 23         | Winston      | DataStructures | 0              |
+-- | 23         | Winston      | DeepLearning   | 0              |
+-- | 23         | Winston      | Math           | 0              |
+-- | 26         | Alex         | DataStructures | 0              |
+-- | 26         | Alex         | DeepLearning   | 0              |
+-- | 26         | Alex         | Math           | 0              |
+-- | 28         | Tatiana      | DataStructures | 0              |
+-- | 28         | Tatiana      | DeepLearning   | 0              |
+-- | 28         | Tatiana      | Math           | 0              |
+-- | 54         | Jonathan     | DataStructures | 0              |
+-- | 54         | Jonathan     | DeepLearning   | 0       ...
 
 -- Test case 2
 -- | student_id | student_name |
