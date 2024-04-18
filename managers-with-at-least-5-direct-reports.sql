@@ -11,7 +11,7 @@ FROM (
     Employee
   GROUP BY
     managerId) x
-  LEFT JOIN Employee e2 ON x.managerId = e2.id
+  INNER JOIN Employee e2 ON x.managerId = e2.id
 WHERE
   x.n_emps >= 5;
 
