@@ -1,22 +1,22 @@
 -- Difficulty: medium
-
 SELECT
-  c1.action,
-  s.user_id
+  s.user_id,
+  c1.action AS confirmations,
+  c2.action AS timeouts
+  c1.action + count(c2.action) AS total
 FROM
   Signups s
-LEFT JOIN
-  Confirmations c1 ON s.user_id = c1.user_id
+  LEFT JOIN Confirmations c1 ON s.user_id = c1.user_id AND c1.action = 'confirmed'
+  LEFT JOIN Confirmations c2 ON s.user_id = c2.user_id AND c2.action = 'timeout'
 GROUP BY
   c1.action,
+  c2.action,
   s.user_id
 ORDER BY
-  s.user_id
-;
+  s.user_id;
 
 -- Test case 13/14
 -- Time Limit Exceeded
-
 -- Signups
 -- | user_id | time_stamp          |
 -- | ------- | ------------------- |
@@ -120,7 +120,6 @@ ORDER BY
 -- | 1       | 2020-02-29 20:52:57 |
 -- | 6       | 2021-03-24 23:56:20 |
 -- | 45      | 2020-12-15 04:02:18 |
-
 -- Confirmations
 -- | user_id | time_stamp          | action    |
 -- | ------- | ------------------- | --------- |
@@ -279,7 +278,6 @@ ORDER BY
 -- | 147     | 2020-01-09 06:26:53 | timeout   |
 -- | 173     | 2020-03-01 02:50:22 | timeout   |
 -- | 127     | 2021-12-05 20:10:20 | timeout   |
-
 -- Test case 1
 -- Create table If Not Exists Signups (user_id int, time_stamp datetime);
 -- Create table If Not Exists Confirmations (user_id int, time_stamp datetime, action ENUM('confirmed','timeout'));
