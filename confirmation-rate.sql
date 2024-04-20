@@ -1,31 +1,29 @@
 -- Difficulty: medium
-
-
-WITH 
-  confs AS (
-    SELECT
-      s.user_id,
-      count(c.action) AS confirmations
-    FROM
-      Signups s
-      LEFT JOIN Confirmations c ON c.user_id = s.user_id AND c.action='confirmed'
-    GROUP BY
-      s.user_id
-  ),
-  timeouts AS (
-    SELECT
-      s.user_id,
-      count(c.action) AS timeouts
-    FROM
-      Signups s
-      LEFT JOIN Confirmations c ON c.user_id = s.user_id AND c.action='timeout'
-    GROUP BY
-      s.user_id
-  )
-
-SELECT 
+WITH confs AS (
+  SELECT
+    s.user_id,
+    count(c.action) AS confirmations
+  FROM
+    Signups s
+    LEFT JOIN Confirmations c ON c.user_id = s.user_id
+      AND c.action = 'confirmed'
+  GROUP BY
+    s.user_id
+),
+timeouts AS (
+  SELECT
+    s.user_id,
+    count(c.action) AS timeouts
+  FROM
+    Signups s
+    LEFT JOIN Confirmations c ON c.user_id = s.user_id
+      AND c.action = 'timeout'
+  GROUP BY
+    s.user_id
+)
+SELECT
   s.user_id,
-  round(IFNULL(confirmations / (confirmations + timeouts), 0), 2) AS confirmation_rate
+  round(IFNULL (confirmations / (confirmations + timeouts), 0), 2) AS confirmation_rate
 FROM
   Signups s
   LEFT JOIN confs c ON c.user_id = s.user_id
@@ -33,9 +31,7 @@ FROM
 GROUP BY
   s.user_id,
   confirmations,
-  timeouts
-;
-
+  timeouts;
 
 -- Test case 13/14
 -- Time Limit Exceeded
