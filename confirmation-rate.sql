@@ -1,22 +1,17 @@
 -- Difficulty: medium
 
 SELECT
-  (select count(action) from x where action = 'confirmed'),
-  s1.user_id
-  -- x.action
+  c1.action,
+  s.user_id
 FROM
-  Signups s1,
-  -- (SELECT count(action) as c FROM Confirmations WHERE action = 'confirmed'
-  --   AND Confirmations.user_id = s1.user_id) x,
-  (select action from Confirmations group by action, user_id) x,
-  Confirmations
--- WHERE
---   s1.user_id = Confirmations.user_id
+  Signups s
+LEFT JOIN
+  Confirmations c1 ON s.user_id = c1.user_id
 GROUP BY
-  s1.user_id,
-  x.action
+  c1.action,
+  s.user_id
 ORDER BY
-  s1.user_id
+  s.user_id
 ;
 
 -- Test case 13/14
