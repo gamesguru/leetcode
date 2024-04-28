@@ -1,5 +1,3 @@
-root = true
-
 [*.sql]
 
 indent_size = 2
