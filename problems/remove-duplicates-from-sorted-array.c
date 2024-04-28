@@ -4,9 +4,6 @@ int removeDuplicates(int *nums, int numsSize)
 {
     if (numsSize == 0)
         return 0;
-    for (int i = 0; i < numsSize; i++)
-        printf("%d ", nums[i]);
-    printf("\n\n");
 
     int j = 0;
     int cur = nums[0];
@@ -22,10 +19,6 @@ int removeDuplicates(int *nums, int numsSize)
                 nums[j] = nums[i];
                 nums[i] = temp;
             }
-            // printf("%d,%d\n", j, i);
-            // for (int i = 0; i < numsSize; i++)
-            //     printf("%d ", nums[i]);
-            // printf("\n");
         }
     }
     return ++j;
