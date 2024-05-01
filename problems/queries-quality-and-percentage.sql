@@ -1,5 +1,22 @@
 -- Difficulty: easy
 
+-- NOTE: fails to account for zeros
+
+-- SELECT
+--   q.query_name,
+--   round(avg(q.rating / q.position), 2) AS quality,
+-- --   count(DISTINCT q_poor.query_name) AS n_poor_queries,
+-- --   count(q.query_name) AS n_queries
+--   round(100 * count(DISTINCT q_poor.query_name) / count(q.query_name), 2) AS poor_query_percentage
+-- FROM
+--   Queries q,
+--   Queries q_poor
+-- WHERE
+--   q_poor.rating < 3 AND q_poor.query_name = q.query_name
+-- GROUP BY
+--   q.query_name
+-- ;
+
 WITH q_poor AS (
     SELECT
         q.query_name,
@@ -30,6 +47,24 @@ GROUP BY
   q.query_name,
   q_poor.query_name
 ;
+
+
+-- Test case 3/13
+
+-- Output
+-- | query_name | quality | poor_query_percentage |
+-- | ---------- | ------- | --------------------- |
+-- | lfdxfi     | 1.75    | 50                    |
+-- | meayln     | 1       | 100                   |
+-- | phqghu     | 2       | 100                   |
+
+-- Expected
+-- | query_name | quality | poor_query_percentage |
+-- | ---------- | ------- | --------------------- |
+-- | lfdxfi     | 1.75    | 50                    |
+-- | meayln     | 1       | 100                   |
+-- | phqghu     | 2       | 100                   |
+-- | rcvscx     | 4       | 0                     |
 
 
 -- Test case 1
